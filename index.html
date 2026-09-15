@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tio SKILL G — LIMBO</title>
+<meta name="description" content="Tio SKILL G, artista angolano. Álbum LIMBO. Do chão de Luanda ao mapa do mundo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#15100d;
+    --bg-alt:#1d1611;
+    --ivory:#f3ece0;
+    --muted:#a89a89;
+    --gold:#e3b23c;
+    --gold-dim:#9c7d2c;
+    --red:#a5192c;
+    --line:rgba(243,236,224,0.12);
+    --ease:cubic-bezier(.16,.8,.24,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ivory);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.01em;
+    line-height:0.95;
+    font-weight:400;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+  section{position:relative;padding:120px 0;}
+  @media(max-width:720px){section{padding:80px 0;}}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 24px;
+    background:rgba(21,16,13,0);
+    transition:background .4s var(--ease), border-color .4s var(--ease);
+    border-bottom:1px solid transparent;
+  }
+  nav.solid{background:rgba(21,16,13,0.92);backdrop-filter:blur(8px);border-color:var(--line);}
+  .nav-mark{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.04em;}
+  .nav-links{display:flex;gap:28px;align-items:center;}
+  .nav-links a{font-size:13px;letter-spacing:0.03em;color:var(--muted);transition:color .25s;}
+  .nav-links a:hover{color:var(--ivory);}
+  .lang-switch{display:flex;gap:6px;font-size:12px;color:var(--muted);}
+  .lang-switch button{
+    background:none;border:1px solid var(--line);color:var(--muted);
+    padding:4px 9px;border-radius:3px;cursor:pointer;font-family:'Inter',sans-serif;
+    transition:.2s;
+  }
+  .lang-switch button.active{color:var(--bg);background:var(--gold);border-color:var(--gold);}
+  .nav-toggle{display:none;background:none;border:none;color:var(--ivory);font-size:24px;cursor:pointer;}
+  @media(max-width:820px){
+    .nav-links{position:fixed;top:0;right:0;height:100vh;width:70%;max-width:320px;
+      background:var(--bg-alt);flex-direction:column;justify-content:center;align-items:flex-start;
+      padding:40px;gap:22px;transform:translateX(100%);transition:transform .4s var(--ease);}
+    .nav-links.open{transform:translateX(0);}
+    .nav-toggle{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  #hero{
+    height:100vh;min-height:640px;
+    display:flex;align-items:flex-end;
+    padding:0;overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute;inset:0;
+    background:url('assets/hero.jpg') center 20%/cover no-repeat;
+    transform:scale(1.08);
+  }
+  .hero-scrim{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(21,16,13,0.35) 0%, rgba(21,16,13,0.55) 55%, rgba(21,16,13,0.96) 100%);
+  }
+  .hero-inner{position:relative;z-index:2;width:100%;padding:0 24px 64px;}
+  .hero-eyebrow{
+    display:flex;gap:14px;align-items:center;color:var(--gold);
+    font-size:13px;letter-spacing:0.08em;margin-bottom:18px;
+  }
+  .hero-eyebrow .dot{width:6px;height:6px;background:var(--red);border-radius:50%;}
+  .hero-title{
+    font-size:clamp(56px,14vw,168px);
+    color:var(--ivory);
+  }
+  .hero-title .word{display:inline-block;overflow:hidden;vertical-align:top;}
+  .hero-title .word span{display:inline-block;transform:translateY(110%);transition:transform 1s var(--ease);}
+  .hero-title.play .word span{transform:translateY(0);}
+  .hero-title .word:nth-child(2) span{transition-delay:.12s;color:var(--gold);}
+  .hero-tag{
+    max-width:480px;margin-top:22px;font-size:17px;color:var(--muted);
+    opacity:0;transform:translateY(14px);transition:opacity .8s var(--ease) .6s, transform .8s var(--ease) .6s;
+  }
+  .hero-title.play + .hero-tag, .hero-tag.play{opacity:1;transform:translateY(0);}
+  .hero-cta{margin-top:34px;display:flex;gap:16px;flex-wrap:wrap;
+    opacity:0;transform:translateY(14px);transition:opacity .8s var(--ease) .8s, transform .8s var(--ease) .8s;}
+  .hero-cta.play{opacity:1;transform:translateY(0);}
+  .btn{
+    display:inline-block;padding:14px 28px;font-size:14px;letter-spacing:0.03em;
+    border-radius:2px;transition:.25s;
+  }
+  .btn-solid{background:var(--gold);color:var(--bg);font-weight:600;}
+  .btn-solid:hover{background:var(--ivory);}
+  .btn-outline{border:1px solid var(--line);color:var(--ivory);}
+  .btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+  .scroll-cue{
+    position:absolute;bottom:28px;right:24px;z-index:2;
+    writing-mode:vertical-rl;font-size:11px;letter-spacing:0.15em;color:var(--muted);
+    display:flex;align-items:center;gap:10px;
+  }
+  .scroll-cue::after{content:'';width:1px;height:34px;background:var(--muted);}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease), transform .7s var(--ease);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- SECTION LABEL ---------- */
+  .kicker{color:var(--gold);font-size:13px;letter-spacing:0.06em;margin-bottom:10px;display:block;}
+  .section-title{font-size:clamp(34px,5vw,56px);max-width:640px;}
+
+  /* ---------- BIO ---------- */
+  #bio .bio-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;margin-top:48px;align-items:start;}
+  @media(max-width:860px){#bio .bio-grid{grid-template-columns:1fr;gap:40px;}}
+  #bio p{color:var(--muted);font-size:17px;max-width:52ch;margin-top:16px;}
+  #bio p:first-of-type{margin-top:0;}
+  .pull-quote{
+    border-left:2px solid var(--gold);padding-left:24px;font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(24px,3vw,32px);color:var(--ivory);line-height:1.15;
+  }
+
+  /* ---------- STATS ---------- */
+  #stats{padding:80px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
+  @media(max-width:720px){.stats-row{grid-template-columns:1fr;gap:40px;}}
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,6vw,72px);color:var(--gold);}
+  .stat-label{color:var(--muted);font-size:14px;margin-top:6px;}
+  .stat-note{color:var(--muted);font-size:12px;margin-top:40px;text-align:center;}
+
+  /* ---------- DISCOGRAPHY ---------- */
+  .release-feature{
+    margin-top:48px;border:1px solid var(--line);padding:48px;
+    display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;
+    background:linear-gradient(135deg, rgba(227,178,60,0.06), transparent 60%);
+  }
+  @media(max-width:720px){.release-feature{grid-template-columns:1fr;padding:32px 24px;}}
+  .release-mark{
+    width:120px;height:120px;border:1px solid var(--gold);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:0.04em;
+  }
+  .release-feature h3{font-size:clamp(38px,5vw,64px);margin-bottom:8px;}
+  .release-meta{color:var(--muted);font-size:13px;letter-spacing:0.04em;margin-bottom:16px;}
+  .release-feature p{color:var(--muted);max-width:56ch;margin-bottom:24px;}
+  .release-links{display:flex;gap:14px;flex-wrap:wrap;}
+  .release-links a{
+    font-size:13px;padding:10px 20px;border:1px solid var(--line);border-radius:2px;transition:.25s;
+  }
+  .release-links a:hover{border-color:var(--gold);color:var(--gold);}
+  .other-releases{margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+  .other-release{border:1px solid var(--line);padding:22px;}
+  .other-release .rk{color:var(--gold);font-size:12px;letter-spacing:0.06em;}
+  .other-release h4{font-family:'Bebas Neue',sans-serif;font-size:24px;margin-top:6px;}
+  .other-release p{color:var(--muted);font-size:13px;margin-top:6px;}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{margin-top:56px;border-left:1px solid var(--line);padding-left:28px;display:flex;flex-direction:column;gap:28px;}
+  .tl-item{display:flex;gap:20px;align-items:flex-start;position:relative;}
+  .tl-item::before{content:'';position:absolute;left:-34px;top:6px;width:9px;height:9px;border-radius:50%;background:var(--gold);}
+  .tl-year{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);min-width:60px;}
+  .tl-item h4{font-size:17px;font-weight:600;margin-bottom:4px;}
+  .tl-item p{color:var(--muted);font-size:14px;}
+
+  /* ---------- GOAL BAR ---------- */
+  .goal-bar-wrap{max-width:520px;margin:40px auto 0;}
+  .goal-bar-label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px;}
+  .goal-bar-track{height:8px;background:var(--bg);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+  .goal-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width 1.4s var(--ease);}
+
+  /* ---------- QUIZ ---------- */
+  .quiz-box{margin-top:48px;border:1px solid var(--line);padding:36px;max-width:620px;}
+  .quiz-q{display:none;}
+  .quiz-q.active{display:block;}
+  .quiz-q p.qtext{font-size:18px;margin-bottom:18px;}
+  .quiz-opt{display:block;width:100%;text-align:left;background:transparent;border:1px solid var(--line);color:var(--ivory);padding:12px 16px;margin-bottom:10px;border-radius:2px;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;transition:.2s;}
+  .quiz-opt:hover{border-color:var(--gold);}
+  .quiz-opt.correct{border-color:#4caf6d;color:#4caf6d;}
+  .quiz-opt.wrong{border-color:var(--red);color:#e2707c;}
+  .quiz-result{display:none;text-align:center;}
+  .quiz-result.active{display:block;}
+  .quiz-result .score{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--gold);}
+  .quiz-restart{margin-top:16px;background:none;border:1px solid var(--line);color:var(--ivory);padding:10px 20px;cursor:pointer;font-family:'Inter',sans-serif;}
+
+  /* ---------- GALLERY ---------- */
+  #gallery{padding-bottom:100px;}
+  .gallery-grid{
+    display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:48px;
+  }
+  .gallery-grid figure{position:relative;overflow:hidden;background:var(--bg-alt);}
+  .gallery-grid img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease);}
+  .gallery-grid figure:hover img{transform:scale(1.05);}
+  .gallery-grid figcaption{
+    position:absolute;left:0;bottom:0;right:0;padding:14px 16px;font-size:12px;
+    color:var(--ivory);background:linear-gradient(0deg, rgba(0,0,0,0.65), transparent);
+    opacity:0;transition:opacity .3s;
+  }
+  .gallery-grid figure:hover figcaption{opacity:1;}
+  .g1{grid-column:span 2;grid-row:span 2;}
+  .g2{grid-column:span 2;}
+  .g3{grid-column:span 2;}
+  .g4{grid-column:span 3;}
+  .g5{grid-column:span 3;}
+  .g6{grid-column:span 2;}
+  .g7{grid-column:span 4;}
+  @media(max-width:820px){
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .g1,.g2,.g3,.g4,.g5,.g6,.g7{grid-column:span 1;}
+    .g1{grid-row:span 2;}
+  }
+
+  /* ---------- NEWS ---------- */
+  .news-list{margin-top:48px;border-top:1px solid var(--line);}
+  .news-item{
+    display:grid;grid-template-columns:110px 1fr;gap:32px;padding:32px 0;
+    border-bottom:1px solid var(--line);
+  }
+  @media(max-width:600px){.news-item{grid-template-columns:1fr;gap:8px;}}
+  .news-year{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);}
+  .news-item h4{font-size:20px;font-weight:600;margin-bottom:8px;}
+  .news-item p{color:var(--muted);font-size:15px;max-width:56ch;}
+  .no-dates{margin-top:48px;color:var(--muted);border:1px dashed var(--line);padding:32px;text-align:center;}
+
+  /* ---------- SOCIAL ---------- */
+  .social-grid{margin-top:48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+  .social-card{
+    border:1px solid var(--line);padding:26px;display:flex;justify-content:space-between;align-items:center;
+    transition:.25s;
+  }
+  .social-card:hover{border-color:var(--gold);background:rgba(227,178,60,0.05);}
+  .social-card .name{font-family:'Bebas Neue',sans-serif;font-size:22px;}
+  .social-card .handle{color:var(--muted);font-size:13px;margin-top:4px;}
+  .social-card .arrow{color:var(--gold);font-size:20px;}
+
+  /* ---------- NEWSLETTER + CONTACT ---------- */
+  #community{background:var(--bg-alt);}
+  .comm-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:48px;}
+  @media(max-width:860px){.comm-grid{grid-template-columns:1fr;gap:48px;}}
+  form{margin-top:24px;display:flex;flex-direction:column;gap:14px;max-width:400px;}
+  input,select{
+    background:transparent;border:none;border-bottom:1px solid var(--line);
+    color:var(--ivory);padding:12px 4px;font-family:'Inter',sans-serif;font-size:15px;
+  }
+  input:focus,select:focus{outline:none;border-color:var(--gold);}
+  input::placeholder{color:var(--muted);}
+  select option{background:var(--bg-alt);}
+  form .btn{margin-top:10px;align-self:flex-start;cursor:pointer;border:none;font-family:'Inter',sans-serif;}
+  .form-note{font-size:12px;color:var(--muted);margin-top:14px;}
+  .form-success{display:none;color:var(--gold);font-size:14px;margin-top:14px;}
+  .contact-block a.email{
+    display:block;font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3vw,34px);
+    color:var(--ivory);margin-top:14px;word-break:break-all;
+  }
+  .contact-block a.email:hover{color:var(--gold);}
+  .contact-block p{color:var(--muted);margin-top:12px;font-size:14px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:40px 0;border-top:1px solid var(--line);}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  footer .foot-mark{font-family:'Bebas Neue',sans-serif;font-size:18px;}
+  footer p{color:var(--muted);font-size:13px;}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#hero" class="nav-mark">TIO SKILL G</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  <div class="nav-links" id="navLinks">
+    <a href="#bio" data-i18n="nav.bio">História</a>
+    <a href="#music" data-i18n="nav.music">Música</a>
+    <a href="#gallery" data-i18n="nav.gallery">Galeria</a>
+    <a href="#news" data-i18n="nav.news">Notícias</a>
+    <a href="#social" data-i18n="nav.social">Redes</a>
+    <a href="#community" data-i18n="nav.contact">Contacto</a>
+    <div class="lang-switch">
+      <button data-lang="pt" class="active">PT</button>
+      <button data-lang="fr">FR</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">Luanda, Angola · Novo: LIMBO</span></div>
+    <h1 class="hero-title" id="heroTitle">
+      <span class="word"><span>TIO</span></span> <span class="word"><span>SKILL&nbsp;G</span></span>
+    </h1>
+    <p class="hero-tag" id="heroTag" data-i18n="hero.tag">Do chão de Luanda ao mapa do mundo.</p>
+    <div class="hero-cta" id="heroCta">
+      <a href="#music" class="btn btn-solid" data-i18n="hero.cta1">Ouvir agora</a>
+      <a href="#bio" class="btn btn-outline" data-i18n="hero.cta2">A história</a>
+    </div>
+  </div>
+  <div class="scroll-cue" data-i18n="hero.scroll">Deslizar</div>
+</section>
+
+<section id="bio">
+  <div class="wrap reveal">
+    <span class="kicker" data-i18n="bio.kicker">Origem</span>
+    <h2 class="section-title" data-i18n="bio.title">Feito à mão. Sem atalho.</h2>
+    <div class="bio-grid">
+      <div>
+        <p data-i18n="bio.p1">Tio SKILL G começa a escrever e a cantar em 2009, em Luanda. Sete anos depois, a 30 de Setembro de 2016, publica a primeira faixa online. Sem estúdio de luxo, sem atalhos — só o trabalho, repetido, até soar certo.</p>
+        <p data-i18n="bio.p2">Raízes angolanas, ambição internacional. Hoje o projecto já é ouvido em vários países, com uma base que cresce sobretudo em Angola, França e na diáspora — sinal de que a música atravessa fronteiras sem precisar de as explicar.</p>
+        <p data-i18n="bio.p3">Self-made, com uma ponta de humor e uma dose de mistério. Não explica tudo. Entrega o trabalho. O resto, quem quiser, descobre.</p>
+      </div>
+      <div class="pull-quote" data-i18n="bio.quote">"O limbo não é o fim. É o sítio onde se decide quem sobe."</div>
+    </div>
+  </div>
+</section>
+
+<section id="stats">
+  <div class="wrap reveal">
+    <div class="stats-row">
+      <div>
+        <div class="stat-num" data-count="199000" data-suffix="+">0</div>
+        <div class="stat-label" data-i18n="stats.plays">Escutas e visualizações acumuladas desde 2016</div>
+      </div>
+      <div>
+        <div class="stat-num" data-count="2009" data-plain="true">0</div>
+        <div class="stat-label" data-i18n="stats.since">A escrever e cantar desde</div>
+      </div>
+      <div>
+        <div class="stat-num" data-count="6" data-plain="true">0</div>
+        <div class="stat-label" data-i18n="stats.projects">Projectos lançados (2018–2026)</div>
+      </div>
+    </div>
+    <p class="stat-note" data-i18n="stats.note">Dados reais das plataformas (SoundCloud + YouTube), actualizados manualmente.</p>
+
+    <div class="goal-bar-wrap reveal">
+      <div class="goal-bar-label">
+        <span data-i18n="stats.goalLabel">Objectivo: 250 000 escutas</span>
+        <span id="goalPct">80%</span>
+      </div>
+      <div class="goal-bar-track"><div class="goal-bar-fill" style="width:0%" id="goalBarFill"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="music">
+  <div class="wrap reveal">
+    <span class="kicker" data-i18n="music.kicker">Discografia</span>
+    <h2 class="section-title" data-i18n="music.title">O som não pede licença.</h2>
+
+    <div class="release-feature">
+      <div class="release-mark">14.08<br>2026</div>
+      <div>
+        <div class="release-meta" data-i18n="music.latest">Último lançamento · Álbum</div>
+        <h3>LIMBO</h3>
+        <p data-i18n="music.limboDesc">Um disco de transição e de afirmação. Entre a noite e o palco, entre Luanda e o resto. Ouro negro, voz quente, zero concessão.</p>
+        <div class="release-links">
+          <a href="https://open.spotify.com/intl-fr/artist/3ouHFrO8cgjwCBouKUWQZI" target="_blank" rel="noopener">Spotify</a>
+          <a href="https://music.apple.com/us/artist/tio-skill-g/1507823406" target="_blank" rel="noopener">Apple Music</a>
+          <a href="https://soundcloud.com/tioskillg" target="_blank" rel="noopener">SoundCloud</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item"><span class="tl-year">2009</span><div><h4 data-i18n="music.tl2009">Os primeiros passos</h4><p data-i18n="music.tl2009d">Começa a escrever e a cantar — sem publicar online ainda.</p></div></div>
+      <div class="tl-item"><span class="tl-year">2016</span><div><h4 data-i18n="music.tl2016">Primeira faixa online</h4><p data-i18n="music.tl2016d">30 de Setembro — o primeiro tema chega às plataformas.</p></div></div>
+      <div class="tl-item"><span class="tl-year">2018</span><div><h4>EP "ESPUTAÇÃO"</h4><p data-i18n="music.epDesc">Disponível no SoundCloud — o projecto que marcou o início do percurso.</p></div></div>
+      <div class="tl-item"><span class="tl-year">2018</span><div><h4>EP "CarpeDiem"</h4><p data-i18n="music.tlCarpe">Segundo EP do ano — o som começa a ganhar forma própria.</p></div></div>
+      <div class="tl-item"><span class="tl-year">2020</span><div><h4 data-i18n="music.tlEnAttente">Compilação "EN ATTENTE"</h4><p data-i18n="music.tlEnAttenteD">Uma pausa que junta ideias soltas num só projecto.</p></div></div>
+      <div class="tl-item"><span class="tl-year">2021</span><div><h4>EP "BOCA PECADORA"</h4><p data-i18n="music.tlBoca">Mais directo, mais cru.</p></div></div>
+      <div class="tl-item"><span class="tl-year">2023</span><div><h4>EP "STOÏCISME"</h4><p data-i18n="music.tlStoicisme">Introspectivo — a calma antes de LIMBO.</p></div></div>
+      <div class="tl-item"><span class="tl-year">2026</span><div><h4>Álbum "LIMBO"</h4><p data-i18n="music.limboDesc2">O projecto mais ambicioso até hoje.</p></div></div>
+    </div>
+
+    <div class="quiz-box reveal">
+      <h3 style="font-size:24px;margin-bottom:6px;" data-i18n="quiz.title">Testa o que sabes sobre Tio SKILL G</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:20px;" data-i18n="quiz.sub">5 perguntas rápidas.</p>
+      <div id="quizArea"></div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap reveal">
+    <span class="kicker" data-i18n="gallery.kicker">Imagens</span>
+    <h2 class="section-title" data-i18n="gallery.title">O que se vê quando a luz baixa.</h2>
+    <div class="gallery-grid">
+      <figure class="g1"><img src="assets/hero.jpg" alt="Retrato Tio SKILL G" loading="lazy"><figcaption data-i18n="gallery.c1">Retrato</figcaption></figure>
+      <figure class="g2"><img src="assets/gallery-1.jpg" alt="Tio SKILL G" loading="lazy"><figcaption data-i18n="gallery.c2">Presença</figcaption></figure>
+      <figure class="g3"><img src="assets/gallery-2.jpg" alt="Tio SKILL G" loading="lazy"><figcaption data-i18n="gallery.c3">Contraluz</figcaption></figure>
+      <figure class="g4"><img src="assets/gallery-3.jpg" alt="Tio SKILL G" loading="lazy"><figcaption data-i18n="gallery.c4">Perfil</figcaption></figure>
+      <figure class="g5"><img src="assets/gallery-5.jpg" alt="Tio SKILL G" loading="lazy"><figcaption data-i18n="gallery.c5">Elegância</figcaption></figure>
+      <figure class="g6"><img src="assets/gallery-4.jpg" alt="Tio SKILL G" loading="lazy"><figcaption data-i18n="gallery.c6">Sombra</figcaption></figure>
+      <figure class="g7"><img src="assets/gallery-6.jpg" alt="Tio SKILL G" loading="lazy"><figcaption data-i18n="gallery.c7">Luz dividida</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap reveal">
+    <span class="kicker" data-i18n="news.kicker">Agenda</span>
+    <h2 class="section-title" data-i18n="news.title">O movimento continua.</h2>
+    <div class="news-list">
+      <div class="news-item">
+        <div class="news-year">2025</div>
+        <div><h4 data-i18n="news.item1Title">LIMBO já disponível</h4><p data-i18n="news.item1Desc">O álbum está disponível nas plataformas. Sem discurso longo: carreguem play.</p></div>
+      </div>
+      <div class="news-item">
+        <div class="news-year">2026</div>
+        <div><h4 data-i18n="news.item2Title">Olhar internacional</h4><p data-i18n="news.item2Desc">O projecto abre portas fora de Angola sem largar a casa.</p></div>
+      </div>
+    </div>
+    <div class="no-dates" data-i18n="news.noDates">Nenhuma data de concerto confirmada neste momento. Fiquem atentos — quando o palco chamar, fica aqui primeiro.</div>
+  </div>
+</section>
+
+<section id="social">
+  <div class="wrap reveal">
+    <span class="kicker" data-i18n="social.kicker">Presença</span>
+    <h2 class="section-title" data-i18n="social.title">Não é um link na bio. É o rasto.</h2>
+    <div class="social-grid">
+      <a class="social-card" href="https://www.instagram.com/jacqueskillg/" target="_blank" rel="noopener">
+        <div><div class="name">Instagram</div><div class="handle">@jacqueskillg</div></div><div class="arrow">↗</div>
+      </a>
+      <a class="social-card" href="https://www.threads.net/@jacqueskillg" target="_blank" rel="noopener">
+        <div><div class="name">Threads</div><div class="handle">@jacqueskillg</div></div><div class="arrow">↗</div>
+      </a>
+      <a class="social-card" href="https://www.tiktok.com/@tioskillg" target="_blank" rel="noopener">
+        <div><div class="name">TikTok</div><div class="handle">@tioskillg</div></div><div class="arrow">↗</div>
+      </a>
+      <a class="social-card" href="https://www.snapchat.com/add/tioskillg" target="_blank" rel="noopener">
+        <div><div class="name">Snapchat</div><div class="handle">@tioskillg</div></div><div class="arrow">↗</div>
+      </a>
+      <a class="social-card" href="https://www.youtube.com/@tioskillg" target="_blank" rel="noopener">
+        <div><div class="name">YouTube</div><div class="handle">Tio SKILL G</div></div><div class="arrow">↗</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="community">
+  <div class="wrap reveal">
+    <div class="comm-grid">
+      <div>
+        <span class="kicker" data-i18n="comm.kicker">Comunidade</span>
+        <h2 class="section-title" data-i18n="comm.title">Fiquem por perto.</h2>
+        <p style="color:var(--muted);margin-top:16px;max-width:44ch;" data-i18n="comm.desc">Newsletter rara. Sem spam. Só quando há algo que mereça o vosso tempo.</p>
+        <form id="newsletterForm">
+          <input type="text" placeholder="Nome" data-i18n-placeholder="comm.name" required>
+          <input type="email" placeholder="Email" data-i18n-placeholder="comm.email" required>
+          <select data-i18n-select="comm.langSelect">
+            <option data-i18n="comm.langPT">Português</option>
+            <option data-i18n="comm.langFR">Français</option>
+            <option data-i18n="comm.langEN">English</option>
+          </select>
+          <button type="submit" class="btn btn-solid" data-i18n="comm.submit">Inscrever</button>
+        </form>
+        <p class="form-success" id="formSuccess" data-i18n="comm.thanks">Obrigado. Quando houver novidade, chega primeiro aqui.</p>
+        <p class="form-note" data-i18n="comm.formNote">Este formulário precisa de ser ligado a um serviço de email (ex: Mailchimp/Brevo) para funcionar de verdade.</p>
+      </div>
+      <div class="contact-block">
+        <span class="kicker" data-i18n="contact.kicker">Contacto profissional</span>
+        <p data-i18n="contact.desc">Bookings, imprensa e collabs:</p>
+        <a class="email" href="mailto:tioskillg10@gmail.com">tioskillg10@gmail.com</a>
+        <p data-i18n="contact.response">Resposta em 48h úteis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <div class="foot-mark">TIO SKILL G</div>
+    <p data-i18n="footer.rights">Todos os direitos reservados.</p>
+    <p data-i18n="footer.tag">Luanda — <span id="egg" style="cursor:default;">o mundo.</span></p>
+  </div>
+</footer>
+
+<div id="eggModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(21,16,13,0.92);align-items:center;justify-content:center;padding:24px;">
+  <div style="max-width:420px;text-align:center;border:1px solid var(--gold);padding:40px 32px;background:var(--bg-alt);">
+    <p style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);margin-bottom:14px;" data-i18n="egg.title">Encontraste o rasto.</p>
+    <p style="color:var(--muted);font-size:14px;" data-i18n="egg.body">Quem procura, encontra sempre primeiro. Fica atento — o que vem a seguir passa por aqui antes de qualquer outro lado.</p>
+    <button onclick="document.getElementById('eggModal').style.display='none'" style="margin-top:20px;background:var(--gold);color:var(--bg);border:none;padding:10px 24px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;" data-i18n="egg.close">Fechar</button>
+  </div>
+</div>
+
+<script>
+/* ---------- i18n ---------- */
+const translations = {
+  pt: {
+    "nav.bio":"História","nav.music":"Música","nav.gallery":"Galeria","nav.news":"Notícias","nav.social":"Redes","nav.contact":"Contacto",
+    "hero.eyebrow":"Luanda, Angola · Novo: LIMBO","hero.tag":"Do chão de Luanda ao mapa do mundo.","hero.cta1":"Ouvir agora","hero.cta2":"A história","hero.scroll":"Deslizar",
+    "bio.kicker":"Origem","bio.title":"Feito à mão. Sem atalho.",
+    "bio.p1":"Tio SKILL G começa a escrever e a cantar em 2009, em Luanda. Sete anos depois, a 30 de Setembro de 2016, publica a primeira faixa online. Sem estúdio de luxo, sem atalhos — só o trabalho, repetido, até soar certo.",
+    "stats.projects":"Projectos lançados (2018–2026)","stats.goalLabel":"Objectivo: 250 000 escutas",
+    "music.tl2009":"Os primeiros passos","music.tl2009d":"Começa a escrever e a cantar — sem publicar online ainda.",
+    "music.tl2016":"Primeira faixa online","music.tl2016d":"30 de Setembro — o primeiro tema chega às plataformas.",
+    "music.tlCarpe":"Segundo EP do ano — o som começa a ganhar forma própria.",
+    "music.tlEnAttente":"Compilação \"EN ATTENTE\"","music.tlEnAttenteD":"Uma pausa que junta ideias soltas num só projecto.",
+    "music.tlBoca":"Mais directo, mais cru.","music.tlStoicisme":"Introspectivo — a calma antes de LIMBO.",
+    "music.limboDesc2":"O projecto mais ambicioso até hoje.",
+    "quiz.title":"Testa o que sabes sobre Tio SKILL G","quiz.sub":"5 perguntas rápidas.",
+    "egg.title":"Encontraste o rasto.","egg.body":"Quem procura, encontra sempre primeiro. Fica atento — o que vem a seguir passa por aqui antes de qualquer outro lado.","egg.close":"Fechar",
+    "bio.p2":"Raízes angolanas, ambição internacional. Hoje o projecto já é ouvido em vários países, com uma base que cresce sobretudo em Angola, França e na diáspora — sinal de que a música atravessa fronteiras sem precisar de as explicar.",
+    "bio.p3":"Self-made, com uma ponta de humor e uma dose de mistério. Não explica tudo. Entrega o trabalho. O resto, quem quiser, descobre.",
+    "bio.quote":"\"O limbo não é o fim. É o sítio onde se decide quem sobe.\"",
+    "stats.plays":"Escutas acumuladas desde 2016","stats.since":"Activo desde","stats.countries":"Países com ouvintes regulares","stats.note":"Dados reais das plataformas de streaming, actualizados manualmente.",
+    "music.kicker":"Discografia","music.title":"O som não pede licença.","music.latest":"Último lançamento",
+    "music.limboDesc":"Um disco de transição e de afirmação. Entre a noite e o palco, entre Luanda e o resto. Ouro negro, voz quente, zero concessão.",
+    "music.epLabel":"EP","music.epDesc":"Disponível no SoundCloud — o projecto que marcou o início do percurso.",
+    "gallery.kicker":"Imagens","gallery.title":"O que se vê quando a luz baixa.",
+    "gallery.c1":"Retrato","gallery.c2":"Presença","gallery.c3":"Contraluz","gallery.c4":"Perfil","gallery.c5":"Elegância","gallery.c6":"Sombra","gallery.c7":"Luz dividida",
+    "news.kicker":"Agenda","news.title":"O movimento continua.",
+    "news.item1Title":"LIMBO já disponível","news.item1Desc":"O álbum está disponível nas plataformas. Sem discurso longo: carreguem play.",
+    "news.item2Title":"Olhar internacional","news.item2Desc":"O projecto abre portas fora de Angola sem largar a casa.",
+    "news.noDates":"Nenhuma data de concerto confirmada neste momento. Fiquem atentos — quando o palco chamar, fica aqui primeiro.",
+    "social.kicker":"Presença","social.title":"Não é um link na bio. É o rasto.",
+    "comm.kicker":"Comunidade","comm.title":"Fiquem por perto.","comm.desc":"Newsletter rara. Sem spam. Só quando há algo que mereça o vosso tempo.",
+    "comm.name":"Nome","comm.email":"Email","comm.langPT":"Português","comm.langFR":"Français","comm.langEN":"English","comm.submit":"Inscrever",
+    "comm.thanks":"Obrigado. Quando houver novidade, chega primeiro aqui.",
+    "comm.formNote":"Este formulário precisa de ser ligado a um serviço de email (ex: Mailchimp/Brevo) para funcionar de verdade.",
+    "contact.kicker":"Contacto profissional","contact.desc":"Bookings, imprensa e collabs:","contact.response":"Resposta em 48h úteis.",
+    "footer.rights":"Todos os direitos reservados.","footer.tag":"Luanda — o mundo."
+  },
+  fr: {
+    "nav.bio":"Histoire","nav.music":"Musique","nav.gallery":"Galerie","nav.news":"Actualités","nav.social":"Réseaux","nav.contact":"Contact",
+    "hero.eyebrow":"Luanda, Angola · Nouveau : LIMBO","hero.tag":"Du sol de Luanda à la carte du monde.","hero.cta1":"Écouter maintenant","hero.cta2":"L'histoire","hero.scroll":"Défiler",
+    "bio.kicker":"Origine","bio.title":"Fait à la main. Sans raccourci.",
+    "bio.p1":"Tio SKILL G commence à écrire et chanter en 2009, à Luanda. Sept ans plus tard, le 30 septembre 2016, il publie son premier titre en ligne. Sans studio de luxe, sans raccourci — juste le travail, répété, jusqu'à ce que ça sonne juste.",
+    "stats.projects":"Projets sortis (2018–2026)","stats.goalLabel":"Objectif : 250 000 écoutes",
+    "music.tl2009":"Les premiers pas","music.tl2009d":"Il commence à écrire et chanter — sans encore publier en ligne.",
+    "music.tl2016":"Premier titre en ligne","music.tl2016d":"30 septembre — le premier morceau arrive sur les plateformes.",
+    "music.tlCarpe":"Deuxième EP de l'année — le son prend forme.",
+    "music.tlEnAttente":"Compilation \"EN ATTENTE\"","music.tlEnAttenteD":"Une pause qui rassemble des idées éparses en un seul projet.",
+    "music.tlBoca":"Plus direct, plus brut.","music.tlStoicisme":"Introspectif — le calme avant LIMBO.",
+    "music.limboDesc2":"Le projet le plus ambitieux à ce jour.",
+    "quiz.title":"Teste tes connaissances sur Tio SKILL G","quiz.sub":"5 questions rapides.",
+    "egg.title":"Tu as trouvé la trace.","egg.body":"Qui cherche trouve toujours en premier. Reste attentif — la suite passera par ici avant partout ailleurs.","egg.close":"Fermer",
+    "bio.p2":"Racines angolaises, ambition internationale. Aujourd'hui le projet est déjà écouté dans plusieurs pays, avec une base qui grandit surtout en Angola, en France et dans la diaspora — signe que la musique traverse les frontières sans avoir à les expliquer.",
+    "bio.p3":"Self-made, avec une pointe d'humour et une dose de mystère. Il n'explique pas tout. Il livre le travail. Le reste, qui veut, le découvre.",
+    "bio.quote":"\"Le limbo n'est pas la fin. C'est l'endroit où se décide qui monte.\"",
+    "stats.plays":"Écoutes cumulées depuis 2016","stats.since":"Actif depuis","stats.countries":"Pays avec des auditeurs réguliers","stats.note":"Données réelles issues des plateformes de streaming, mises à jour manuellement.",
+    "music.kicker":"Discographie","music.title":"Le son ne demande pas la permission.","music.latest":"Dernière sortie",
+    "music.limboDesc":"Un disque de transition et d'affirmation. Entre la nuit et la scène, entre Luanda et le reste. Or noir, voix chaude, zéro concession.",
+    "music.epLabel":"EP","music.epDesc":"Disponible sur SoundCloud — le projet qui a marqué le début du parcours.",
+    "gallery.kicker":"Images","gallery.title":"Ce qu'on voit quand la lumière baisse.",
+    "gallery.c1":"Portrait","gallery.c2":"Présence","gallery.c3":"Contre-jour","gallery.c4":"Profil","gallery.c5":"Élégance","gallery.c6":"Ombre","gallery.c7":"Lumière partagée",
+    "news.kicker":"Actualités","news.title":"Le mouvement continue.",
+    "news.item1Title":"LIMBO déjà disponible","news.item1Desc":"L'album est disponible sur les plateformes. Sans long discours : appuyez sur play.",
+    "news.item2Title":"Regard international","news.item2Desc":"Le projet s'ouvre des portes hors d'Angola sans quitter la maison.",
+    "news.noDates":"Aucune date de concert confirmée pour le moment. Restez attentifs — quand la scène appellera, ce sera annoncé ici en premier.",
+    "social.kicker":"Présence","social.title":"Ce n'est pas un lien en bio. C'est la trace.",
+    "comm.kicker":"Communauté","comm.title":"Restez proches.","comm.desc":"Newsletter rare. Pas de spam. Seulement quand il y a quelque chose qui mérite votre temps.",
+    "comm.name":"Nom","comm.email":"Email","comm.langPT":"Português","comm.langFR":"Français","comm.langEN":"English","comm.submit":"S'inscrire",
+    "comm.thanks":"Merci. Dès qu'il y a du nouveau, ça arrive ici en premier.",
+    "comm.formNote":"Ce formulaire doit être connecté à un service d'emailing (ex : Mailchimp/Brevo) pour fonctionner réellement.",
+    "contact.kicker":"Contact professionnel","contact.desc":"Bookings, presse et collabs :","contact.response":"Réponse sous 48h ouvrées.",
+    "footer.rights":"Tous droits réservés.","footer.tag":"Luanda — le monde."
+  },
+  en: {
+    "nav.bio":"Story","nav.music":"Music","nav.gallery":"Gallery","nav.news":"News","nav.social":"Socials","nav.contact":"Contact",
+    "hero.eyebrow":"Luanda, Angola · New: LIMBO","hero.tag":"From the streets of Luanda to the world map.","hero.cta1":"Listen now","hero.cta2":"The story","hero.scroll":"Scroll",
+    "bio.kicker":"Origin","bio.title":"Made by hand. No shortcuts.",
+    "bio.p1":"Tio SKILL G starts writing and singing in 2009, in Luanda. Seven years later, on September 30, 2016, he releases his first track online. No luxury studio, no shortcuts — just the work, repeated until it sounded right.",
+    "stats.projects":"Projects released (2018–2026)","stats.goalLabel":"Goal: 250,000 plays",
+    "music.tl2009":"The first steps","music.tl2009d":"Starts writing and singing — not yet published online.",
+    "music.tl2016":"First track online","music.tl2016d":"September 30 — the first track lands on streaming platforms.",
+    "music.tlCarpe":"Second EP of the year — the sound starts taking shape.",
+    "music.tlEnAttente":"Compilation \"EN ATTENTE\"","music.tlEnAttenteD":"A pause that gathers loose ideas into one project.",
+    "music.tlBoca":"More direct, more raw.","music.tlStoicisme":"Introspective — the calm before LIMBO.",
+    "music.limboDesc2":"The most ambitious project to date.",
+    "quiz.title":"Test what you know about Tio SKILL G","quiz.sub":"5 quick questions.",
+    "egg.title":"You found the trail.","egg.body":"Whoever looks always finds first. Stay close — what comes next lands here before anywhere else.","egg.close":"Close",
+    "bio.p2":"Angolan roots, international ambition. Today the project is already heard in several countries, with a base growing mostly in Angola, France and the diaspora — a sign the music crosses borders without needing to explain itself.",
+    "bio.p3":"Self-made, with a touch of humor and a dose of mystery. He doesn't explain everything. He delivers the work. The rest, whoever wants to, discovers.",
+    "bio.quote":"\"Limbo isn't the end. It's where it gets decided who rises.\"",
+    "stats.plays":"Cumulative plays since 2016","stats.since":"Active since","stats.countries":"Countries with regular listeners","stats.note":"Real data from streaming platforms, updated manually.",
+    "music.kicker":"Discography","music.title":"The sound doesn't ask permission.","music.latest":"Latest release",
+    "music.limboDesc":"A record of transition and affirmation. Between the night and the stage, between Luanda and the rest. Black gold, warm voice, zero compromise.",
+    "music.epLabel":"EP","music.epDesc":"Available on SoundCloud — the project that marked the start of the journey.",
+    "gallery.kicker":"Images","gallery.title":"What you see when the light drops.",
+    "gallery.c1":"Portrait","gallery.c2":"Presence","gallery.c3":"Backlit","gallery.c4":"Profile","gallery.c5":"Elegance","gallery.c6":"Shadow","gallery.c7":"Split light",
+    "news.kicker":"Updates","news.title":"The movement continues.",
+    "news.item1Title":"LIMBO out now","news.item1Desc":"The album is available on all platforms. No long speech: hit play.",
+    "news.item2Title":"International outlook","news.item2Desc":"The project is opening doors outside Angola without leaving home behind.",
+    "news.noDates":"No confirmed tour dates at the moment. Stay tuned — when the stage calls, it lands here first.",
+    "social.kicker":"Presence","social.title":"Not a link in bio. The trail.",
+    "comm.kicker":"Community","comm.title":"Stay close.","comm.desc":"Rare newsletter. No spam. Only when there's something worth your time.",
+    "comm.name":"Name","comm.email":"Email","comm.langPT":"Português","comm.langFR":"Français","comm.langEN":"English","comm.submit":"Subscribe",
+    "comm.thanks":"Thanks. When there's news, it lands here first.",
+    "comm.formNote":"This form needs to be connected to an email service (e.g. Mailchimp/Brevo) to actually work.",
+    "contact.kicker":"Professional contact","contact.desc":"Bookings, press and collabs:","contact.response":"Reply within 48 business hours.",
+    "footer.rights":"All rights reserved.","footer.tag":"Luanda — the world."
+  }
+};
+
+function setLang(lang){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(translations[lang][key]) el.textContent = translations[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(translations[lang][key]) el.placeholder = translations[lang][key];
+  });
+  document.querySelectorAll('.lang-switch button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang===lang);
+  });
+  localStorage.setItem('tsg-lang', lang);
+}
+document.querySelectorAll('.lang-switch button').forEach(btn=>{
+  btn.addEventListener('click', ()=> setLang(btn.dataset.lang));
+});
+setLang('pt');
+
+/* ---------- NAV solid on scroll + mobile toggle ---------- */
+const navEl = document.getElementById('nav');
+window.addEventListener('scroll', ()=>{
+  navEl.classList.toggle('solid', window.scrollY > 60);
+});
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', ()=> navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> navLinks.classList.remove('open')));
+
+/* ---------- Hero entrance ---------- */
+window.addEventListener('load', ()=>{
+  document.getElementById('heroTitle').classList.add('play');
+  document.getElementById('heroTag').classList.add('play');
+  document.getElementById('heroCta').classList.add('play');
+});
+
+/* ---------- Hero parallax ---------- */
+const heroBg = document.querySelector('.hero-bg');
+window.addEventListener('scroll', ()=>{
+  const y = window.scrollY;
+  if(y < window.innerHeight) heroBg.style.transform = `scale(1.08) translateY(${y*0.15}px)`;
+});
+
+/* ---------- Reveal on scroll ---------- */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+},{threshold:0.15});
+revealEls.forEach(el=> io.observe(el));
+
+/* ---------- Stat count-up ---------- */
+const statEls = document.querySelectorAll('.stat-num');
+const statIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const el = e.target;
+      const target = parseInt(el.dataset.count,10);
+      const suffix = el.dataset.suffix || '';
+      const plain = el.dataset.plain === 'true';
+      const dur = 1400;
+      const start = performance.now();
+      function tick(now){
+        const p = Math.min((now-start)/dur, 1);
+        const eased = 1 - Math.pow(1-p, 3);
+        const val = Math.floor(eased*target);
+        el.textContent = plain ? val : val.toLocaleString('pt-PT') + suffix;
+        if(p<1) requestAnimationFrame(tick);
+        else el.textContent = plain ? target : target.toLocaleString('pt-PT') + suffix;
+      }
+      requestAnimationFrame(tick);
+      statIO.unobserve(el);
+    }
+  });
+},{threshold:0.4});
+statEls.forEach(el=> statIO.observe(el));
+
+/* ---------- Goal bar ---------- */
+const goalIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.getElementById('goalBarFill').style.width = '79.6%';
+      document.getElementById('goalPct').textContent = '≈80% (199 000 / 250 000)';
+      goalIO.unobserve(e.target);
+    }
+  });
+},{threshold:0.4});
+const goalWrap = document.querySelector('.goal-bar-wrap');
+if(goalWrap) goalIO.observe(goalWrap);
+
+/* ---------- Easter egg ---------- */
+document.getElementById('egg').addEventListener('click', ()=>{
+  document.getElementById('eggModal').style.display = 'flex';
+});
+
+/* ---------- Quiz ---------- */
+const quizData = [
+  {q:"Em que cidade Tio SKILL G começou a fazer música?", opts:["Lisboa","Luanda","Paris","São Paulo"], correct:1},
+  {q:"Em que ano foi publicada a primeira faixa online?", opts:["2009","2014","2016","2020"], correct:2},
+  {q:"Qual é o álbum mais recente?", opts:["ESPUTAÇÃO","STOÏCISME","LIMBO","BOCA PECADORA"], correct:2},
+  {q:"Qual destes NÃO é um projecto de Tio SKILL G?", opts:["CarpeDiem","EN ATTENTE","Ouro Negro","BOCA PECADORA"], correct:2},
+  {q:"Qual é o género musical de Tio SKILL G?", opts:["Rap / Hip-Hop","Jazz","Rock","Eletrónica"], correct:0}
+];
+let quizIndex = 0, quizScore = 0;
+const quizArea = document.getElementById('quizArea');
+function renderQuiz(){
+  if(quizIndex >= quizData.length){
+    quizArea.innerHTML = `<div class="quiz-result active"><div class="score">${quizScore}/${quizData.length}</div><p style="color:var(--muted);margin-top:8px;">Obrigado por jogares.</p><button class="quiz-restart" id="quizRestart">Recomeçar</button></div>`;
+    document.getElementById('quizRestart').addEventListener('click', ()=>{ quizIndex=0; quizScore=0; renderQuiz(); });
+    return;
+  }
+  const item = quizData[quizIndex];
+  quizArea.innerHTML = `<div class="quiz-q active"><p class="qtext">${quizIndex+1}. ${item.q}</p>${item.opts.map((o,i)=>`<button class="quiz-opt" data-i="${i}">${o}</button>`).join('')}</div>`;
+  quizArea.querySelectorAll('.quiz-opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = parseInt(btn.dataset.i,10);
+      quizArea.querySelectorAll('.quiz-opt').forEach(b=> b.disabled = true);
+      if(i === item.correct){ btn.classList.add('correct'); quizScore++; }
+      else{
+        btn.classList.add('wrong');
+        quizArea.querySelector(`[data-i="${item.correct}"]`).classList.add('correct');
+      }
+      setTimeout(()=>{ quizIndex++; renderQuiz(); }, 900);
+    });
+  });
+}
+if(quizArea) renderQuiz();
+
+/* ---------- Newsletter (visual only, no backend) ---------- */
+document.getElementById('newsletterForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  document.getElementById('formSuccess').style.display = 'block';
+  this.reset();
+});
+</script>
+</body>
+</html>
