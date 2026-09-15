@@ -79,7 +79,7 @@
   }
   .hero-bg{
     position:absolute;inset:0;
-    background:url('assets/hero.jpg') center 20%/cover no-repeat;
+    background:url('assets/hero.jpg') center 32%/cover no-repeat;
     transform:scale(1.08);
   }
   .hero-scrim{
@@ -328,6 +328,10 @@
         <p data-i18n="bio.p1">Tio SKILL G começa a escrever e a cantar em 2009, em Luanda. Sete anos depois, a 30 de Setembro de 2016, publica a primeira faixa online. Sem estúdio de luxo, sem atalhos — só o trabalho, repetido, até soar certo.</p>
         <p data-i18n="bio.p2">Raízes angolanas, ambição internacional. Hoje o projecto já é ouvido em vários países, com uma base que cresce sobretudo em Angola, França e na diáspora — sinal de que a música atravessa fronteiras sem precisar de as explicar.</p>
         <p data-i18n="bio.p3">Self-made, com uma ponta de humor e uma dose de mistério. Não explica tudo. Entrega o trabalho. O resto, quem quiser, descobre.</p>
+        <p style="margin-top:20px;">
+          <span data-i18n="bio.bookLabel" style="color:var(--gold);font-size:13px;letter-spacing:0.04em;">Também autor —</span>
+          <a href="https://www.wattpad.com/story/403229217-les-lettres-que-je-n%27ai-jamais-envoy%C3%A9es" target="_blank" rel="noopener" style="color:var(--ivory);border-bottom:1px solid var(--gold);" data-i18n="bio.bookTitle">"Les lettres que je n'ai jamais envoyées" (Wattpad)</a>
+        </p>
       </div>
       <div class="pull-quote" data-i18n="bio.quote">"O limbo não é o fim. É o sítio onde se decide quem sobe."</div>
     </div>
@@ -524,6 +528,7 @@ const translations = {
     "bio.p2":"Raízes angolanas, ambição internacional. Hoje o projecto já é ouvido em vários países, com uma base que cresce sobretudo em Angola, França e na diáspora — sinal de que a música atravessa fronteiras sem precisar de as explicar.",
     "bio.p3":"Self-made, com uma ponta de humor e uma dose de mistério. Não explica tudo. Entrega o trabalho. O resto, quem quiser, descobre.",
     "bio.quote":"\"O limbo não é o fim. É o sítio onde se decide quem sobe.\"",
+    "bio.bookLabel":"Também autor —","bio.bookTitle":"\"Les lettres que je n'ai jamais envoyées\" (Wattpad)",
     "stats.plays":"Escutas acumuladas desde 2016","stats.since":"Activo desde","stats.countries":"Países com ouvintes regulares","stats.note":"Dados reais das plataformas de streaming, actualizados manualmente.",
     "music.kicker":"Discografia","music.title":"O som não pede licença.","music.latest":"Último lançamento",
     "music.limboDesc":"Um disco de transição e de afirmação. Entre a noite e o palco, entre Luanda e o resto. Ouro negro, voz quente, zero concessão.",
@@ -714,10 +719,15 @@ document.getElementById('egg').addEventListener('click', ()=>{
 /* ---------- Quiz ---------- */
 const quizData = [
   {q:"Em que cidade Tio SKILL G começou a fazer música?", opts:["Lisboa","Luanda","Paris","São Paulo"], correct:1},
+  {q:"Qual é o género musical de Tio SKILL G?", opts:["Jazz","Rock","Rap / Hip-Hop","Eletrónica"], correct:2},
+  {q:"Em que ano começou a escrever e a cantar?", opts:["2009","2014","2016","2020"], correct:0},
   {q:"Em que ano foi publicada a primeira faixa online?", opts:["2009","2014","2016","2020"], correct:2},
   {q:"Qual é o álbum mais recente?", opts:["ESPUTAÇÃO","STOÏCISME","LIMBO","BOCA PECADORA"], correct:2},
-  {q:"Qual destes NÃO é um projecto de Tio SKILL G?", opts:["CarpeDiem","EN ATTENTE","Ouro Negro","BOCA PECADORA"], correct:2},
-  {q:"Qual é o género musical de Tio SKILL G?", opts:["Rap / Hip-Hop","Jazz","Rock","Eletrónica"], correct:0}
+  {q:"Quantos projectos (EPs + álbum) já foram lançados entre 2018 e 2026?", opts:["3","4","6","9"], correct:2},
+  {q:"Qual destes é um EP de 2021?", opts:["CarpeDiem","BOCA PECADORA","STOÏCISME","ESPUTAÇÃO"], correct:1},
+  {q:"Qual destes títulos NÃO é uma música de Tio SKILL G?", opts:["NarHulk","Plata O Plomo","Ouro Negro","Trapanese"], correct:2},
+  {q:"Para além da música, o que mais Tio SKILL G já publicou?", opts:["Um livro","Um podcast","Um jogo","Uma linha de roupa"], correct:0},
+  {q:"Qual é o nome da compilação lançada em 2020?", opts:["EN ATTENTE","STOÏCISME","Formidable","Memórias"], correct:0}
 ];
 let quizIndex = 0, quizScore = 0;
 const quizArea = document.getElementById('quizArea');
